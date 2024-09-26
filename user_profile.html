@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh; /* Ensures it takes up the full viewport height */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+           
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .sidebar ul li a:hover {
+            color: #ff6868;
+        }
+
+        /* Profile Section */
+        .profile-container {
+            flex-grow: 1;
+            padding: 40px;
+            margin-left: 250px; /* Margin to avoid overlap with the fixed sidebar */
+            box-sizing: border-box;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-header h1 {
+            font-size: 24px;
+        }
+
+        .profile-form {
+            margin-top: 30px;
+        }
+
+        .profile-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .profile-form input[type="text"],
+        .profile-form input[type="email"],
+        .profile-form input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .profile-form .alert {
+            color: #d9534f;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .profile-form .whatsapp-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-form .whatsapp-section input {
+            margin-right: 10px;
+        }
+
+        .profile-form button {
+            padding: 10px 20px;
+            background-color: #ff6868;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .profile-form button:hover {
+            background-color: #ff4b4b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Manage your Account</h2>
+            <ul>
+                <li><a href="#">Basic Profile</a></li>
+                <li><a href="#">Your Shortlists</a></li>
+                <li><a href="#">Owners you Contacted</a></li>
+                <li><a href="#">Your Payments</a></li>
+                <li><a href="#">Your Properties</a></li>
+                <li><a href="#">Interested in your Properties</a></li>
+            </ul>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>Edit Your Profile</h1>
+                <!-- Add more options like icons or buttons here if needed -->
+            </div>
+
+            <form class="profile-form">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email">
+                <div class="alert">Click here to generate email verification mail.</div>
+
+                <label for="phone">Mobile Phone</label>
+                <input type="tel" id="phone">
+                <div class="alert">Click here to generate password reset email.</div>
+
+                <div class="whatsapp-section">
+                    <input type="checkbox" id="whatsapp">
+                    <label for="whatsapp">Get Updates on WhatsApp</label>
+                </div>
+
+                <button type="button">Save Profile</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
