@@ -31,3 +31,29 @@ if (!empty($email) && !empty($password)) {
 }
 $conn->close();
 ?>
+<?php
+session_start();
+include 'db_connect.php'; // This file should handle the database connection
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+
+    // Retrieve user profile from the database
+    $stmt = $conn->prepare("SELECT name, email, phone, whatsapp, profile_photo FROM users WHERE email=?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // If email is found, store the user details in the session
+        $user = $result->fetch_assoc();
+        $_SESSION['user'] = $user;
+
+        // Redirect to the profile page after login
+        header('Location: profile.php');
+    } else {
+        // If email is not found, display an error
+        echo 'Invalid email or user does not exist!';
+    }
+}
+?>

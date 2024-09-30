@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
+    <title>owner Page</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -211,7 +212,7 @@
                         <a class="dropdown-item" href="Customer_Login.html">Customer Login</a>
                     </div>
                 </li>
-               <!-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle custom-dropdown-btn" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="bi bi-menu-button-wide-fill"></i> Menu
                     </a>
@@ -221,7 +222,7 @@
                         <a class="dropdown-item" href="Services.html">Services</a>
                         <a class="dropdown-item" href="contact.html">Contact</a>
                     </div>
-                </li>-->
+                </li>
             </ul>
         </div>
     </nav>
@@ -232,14 +233,12 @@
             <h2>Manage your Account</h2>
             <ul>
                 <li><a href="#" onclick="showSection('profile-form')">Basic Profile</a></li>
-                <li><a href="#" onclick="showSection('shortlist-section')">Your Shortlists</a></li>
-                <li><a href="#">Owners you Contacted</a></li>
-                <li><a href="#">Your Payments</a></li>
-                <li><a href="#">Your Properties</a></li>
+                <li><a href="#" onclick="showSection('shortlist-section')">Your properties</a></li>
+                
+                
                 <li><a href="#">Interested in your Properties</a></li>
             </ul>
         </div>
-        
 
         <!-- Profile Section -->
         <div class="profile-container" id="profile-form" style="display: none;">
@@ -268,12 +267,12 @@
                     <label for="whatsapp">Get Updates on WhatsApp</label>
                 </div>
                 <button type="button">Save Profile</button>
-            </form>           
+            </form>
         </div>
     
         <!-- Add more sections here if needed, e.g., for shortlists -->
         <div class="profile-container" id="shortlist-section" style="display: none;">
-            <h3>Your Shortlists</h3>
+            <h3>Your properties</h3>
             <!-- Your Shortlists content -->
         </div>
     </div>

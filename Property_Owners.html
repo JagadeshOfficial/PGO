@@ -134,6 +134,7 @@ nav a {
 
 .left-panel {
     width: 30%;
+    height: 500px;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.8); /* Optional background color for better readability */
     border-radius: 10px;
@@ -401,7 +402,7 @@ nav a {
                             <a class="dropdown-item" href="Customer_Login.html">Customer Login</a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <!--<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle custom-dropdown-btn" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-menu-button-wide-fill"></i> Menu
                         </a>
@@ -411,7 +412,7 @@ nav a {
                             <a class="dropdown-item" href="Services.html">Services</a>
                             <a class="dropdown-item" href="contact.html">Contact</a>
                         </div>
-                    </li>
+                    </li>-->
 
                 </ul>
             </div>
@@ -449,11 +450,12 @@ nav a {
                     </div>
                     
                     <div class="Property-ad-type" id="property-ad-type">
-                        <div class="ad-type-buttons residential active">
-                            <button onclick="selectAdType(this)">Rent</button>
-                            <button onclick="selectAdType(this)">Resale</button>
-                            <button onclick="showForm('pg-hostel')">PG/Hostel</button>
-                            <button onclick="selectAdType(this)">Flatmates</button>
+
+                            <div class="ad-type-buttons residential active">
+                                <button onclick="showForm('hotelbooking')">Hotel Booking</button>
+                                <button onclick="showForm('pg-hostel')">PG/Hostel</button>
+                                <button onclick="showForm('flatmates')">Flatmates</button>
+                            </div>
                         </div>
                         
                         <div class="ad-type-buttons commercial">
@@ -472,15 +474,132 @@ nav a {
                 </div>
         
                 <!-- Hidden Form -->
-                <form id="property-form" class="property-form mt-4" style="display: none;" method="POST" enctype="multipart/form-data" action="submit_property.php">
+                <form id="hotelbooking-form" class="property-form" style="display: none;" method="POST" enctype="multipart/form-data" action="submit_property.php">
+                    <input type="hidden" name="form_type" value="hotelbooking">
+                    <h3>Hotel Booking Form</h3>
+                    <div class="form-group">
+                        <label for="hotelName">Hotel Name:</label>
+                        <input type="text" id="hotelName" name="hotelName" required>
+                    </div>  
+                    <div class="form-group">
+                        <label for="localities">Location:</label>
+                        <input type="text" id="localities" name="localities" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sharingType">sharingType:</label>
+                        <input type="text" id="sharingType" name="sharingType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price">Price:</label>
+                        <input type="text" id="Price" name="Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="facilities">Facilities:</label>
+                        <input type="text" id="facilities" name="facilities" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="images">Images:</label>
+                        <input type="file" id="images" name="images[]" multiple required>
+                    </div>
+                    <div class="form-group">
+                        <label for="videos">Videos:</label>
+                        <input type="file" id="videos" name="videos[]" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contact Details:</label>
+                        <input type="text" id="contact" name="contact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">city:</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyType">propertyType:</label>
+                        <input type="text" id="propertyType" name="propertyType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">availability:</label>
+                        <input type="text" id="availability" name="availability" required>
+                    </div>
+                    <div class="form-group">
+                        <lable for="description">description:</lable>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
+                    <!-- Add more fields specific to 'Rent' -->
+                    <button type="submit" class="submit-btn">Submit Hotel Booking Property</button>
+                </form>        
+                <!-- Flatmates Form -->
+                <form id="flatmates-form" class="property-form" style="display: none;" method="POST" enctype="multipart/form-data" action="submit_property.php">
+                    <input type="hidden" name="form_type" value="flatmates">
+                    <h3>Flatmates Form</h3>
+                    <div class="form-group">
+                        <label for="flatmateName">Flatmate Name:</label>
+                        <input type="text" id="flatmateName" name="flatmateName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="localities">Location:</label>
+                        <input type="text" id="localities" name="localities" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sharingType">sharingType:</label>
+                        <input type="text" id="sharingType" name="sharingType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelBookingPrice">Price:</label>
+                        <input type="text" id="hotelBookingPrice" name="hotelBookingPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="facilities">Facilities:</label>
+                        <input type="text" id="facilities" name="facilities" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="images">Images:</label>
+                        <input type="file" id="images" name="images[]" multiple required>
+                    </div>
+                    <div class="form-group">
+                        <label for="videos">Videos:</label>
+                        <input type="file" id="videos" name="videos[]" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contact Details:</label>
+                        <input type="text" id="contact" name="contact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">city:</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyType">propertyType:</label>
+                        <input type="text" id="propertyType" name="propertyType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">availability:</label>
+                        <input type="text" id="availability" name="availability" required>
+                    </div>      
+                    <div class="form-group">
+                        <lable for="description">description:</lable>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
+                    <!-- Add more fields specific to 'Flatmates' -->
+                    <button type="submit" class="submit-btn">Submit Flatmates Property</button>
+                </form>
+                <!-- PG/Hostel Form -->
+                <form id="pg-hostel-form" class="property-form" style="display: none;" method="POST" enctype="multipart/form-data" action="submit_property.php">
+                    <input type="hidden" name="form_type" value="pgHostel">
+                    <h4>PG/Hostels</h4>
                     <div class="form-group">
                         <label for="hostelName">Hostel Name:</label>
                         <input type="text" id="hostelName" name="hostelName" required>
                     </div>
                     <div class="form-group">
-                        <label for="location">Location:</label>
-                        <input type="text" id="location" name="location" required>
+                        <label for="localities">Location:</label>
+                        <input type="text" id="localities" name="localities" required>
                     </div>
+                    <div class="form-group">
+                        <label for="Sharing_Type">sharing Type:</label>
+                        <input type="text" id="Sharing_Type" name="Sharing_Type" required>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="amount">Amount</label>
                         <input type="text" id="amount" name="amount" required>
@@ -501,35 +620,63 @@ nav a {
                         <label for="contact">Contact Details:</label>
                         <input type="text" id="contact" name="contact" required>
                     </div>
+                    <div class="form-group">
+                        <label for="city">city:</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="propertyType">propertyType:</label>
+                        <input type="text" id="propertyType" name="propertyType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">availability:</label>
+                        <input type="text" id="availability" name="availability" required>
+                    </div>
+                    <div class="form-group">
+                        <lable for="description">description:</lable>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
                     <button type="submit" class="submit-btn">Submit Property</button>
                 </form>
-        
-                <button class="submit-btn mt-4">Start Posting Your Ad For FREE</button>
-            </div>
         </div>
-        
         <script>
-        function showAdType(type) {
-            document.querySelectorAll('.ad-type-buttons').forEach(function(el) {
-                el.classList.remove('active');
-            });
-            document.querySelector('.' + type).classList.add('active');
-            document.getElementById('property-form').style.display = 'none';
-        }
-        
-        function showForm(adType) {
-            if (adType === 'pg-hostel') {
-                document.getElementById('property-form').style.display = 'block';
+            function showAdType(type) {
+                document.querySelectorAll('.ad-type-buttons').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+                document.querySelector('.' + type).classList.add('active');
+                hideAllForms(); // Hide all forms before displaying the specific one
             }
-        }
-        
-        function selectAdType(button) {
-            console.log(button.textContent + ' selected');
-        }
-        </script>
-        
+            
+            function showForm(adType) {
+                // Hide all forms first
+                hideAllForms();
+            
+                // Show only the form related to the clicked button
+                if (adType === 'hotelbooking') {
+                    document.getElementById('hotelbooking-form').style.display = 'block';
+                } else if (adType === 'pg-hostel') {
+                    document.getElementById('pg-hostel-form').style.display = 'block';
+                } else if (adType === 'flatmates') {
+                    document.getElementById('flatmates-form').style.display = 'block';
+                }
+            }
+            
+            // This function hides all the forms
+            function hideAllForms() {
+                const forms = ['hotelbooking-form', 'pg-hostel-form', 'flatmates-form'];
+                forms.forEach(function(formId) {
+                    document.getElementById(formId).style.display = 'none';
+                });
+            }
+            
+            function selectAdType(button) {
+                console.log(button.textContent + ' selected');
+            }
+        </script>        
+            
+        </div>
     </div>
-</div>
 <!-- Bootstrap JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

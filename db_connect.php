@@ -1,10 +1,8 @@
 <?php
-// db_connection.php
-
-$servername = "localhost";  // Your database server
-$username = "root";         // Your database username
-$password = "12345";             // Your database password
-$dbname = "havenist";  // Your database name
+$servername = "localhost";
+$username = "root"; // Replace with your MySQL username
+$password = "12345"; // Replace with your MySQL password
+$dbname = "havenist";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -13,4 +11,4 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-?>
+

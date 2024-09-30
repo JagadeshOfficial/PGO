@@ -106,9 +106,16 @@
                     <input type="text" id="localities" name="localities" placeholder="Search up to 3 localities or landmarks">
                     <select id="propertyType" name="propertyType">
                         <option value="">Select Property Type</option>
-                        <option value="Full House">Full House</option>
                         <option value="PG/Hostel">PG/Hostel</option>
                         <option value="Flatmates">Flatmates</option>
+                        <option value="hotelbooking">Hotel Booking</option>
+                    </select>
+                    <select id="availability" name="availability" class="hidden">
+                        <option value="">Availability</option>
+                        <option value="Immediate">Immediate</option>
+                        <option value="Within a week">Within a week</option>
+                        <option value="Within a month">Within a month</option>
+                        <option value="After a month">After a month</option>
                     </select>
                     <button type="submit">Search</button>
                 </form>
@@ -142,7 +149,96 @@ function logout() {
 }
 
     </script>
+   <script>
+    function checkLoginStatus() {
+        const userLoggedIn = sessionStorage.getItem('userLoggedIn') === 'true';
+        const ownerLoggedIn = sessionStorage.getItem('ownerLoggedIn') === 'true';
 
+        if (userLoggedIn || ownerLoggedIn) {
+            document.getElementById('signupDropdown').classList.add('hidden');
+            document.getElementById('loginDropdown').classList.add('hidden');
+        } else {
+            document.getElementById('signupDropdown').classList.remove('hidden');
+            document.getElementById('loginDropdown').classList.remove('hidden');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
+</script>
+
+<script>
+    document.getElementById('propertyType').addEventListener('change', function() {
+        const propertyType = this.value;
+
+        // Get all filter groups
+        const pgHostelFilters = document.querySelectorAll('.pg-hostel-filters');
+        const flatmatesFilters = document.querySelectorAll('.flatmates-filters');
+        const hostelbookingFilters = document.querySelectorAll('.hotelbooking-filters');
+        // Hide all filters initially
+        hideAllFilters();
+
+        // Show relevant filters based on selected property type
+        if (propertyType === 'PG/Hostel') {
+            showFilters(pgHostelFilters);
+        } else if (propertyType === 'Flatmates') {
+            showFilters(flatmatesFilters);
+        } else if (propertyType === 'hotel booking') {
+            showFilters(hotelbookingFilters);
+        } 
+    });
+
+    // Helper function to hide all filters
+    function hideAllFilters() {
+        document.querySelectorAll('.filter-group').forEach(filterGroup => {
+            filterGroup.classList.add('hidden');
+        });
+    }
+
+    // Helper function to show selected filters
+    function showFilters(filters) {
+        filters.forEach(filter => {
+            filter.classList.remove('hidden');
+        });
+    }
+
+    // Call this function when page loads to ensure no filters are shown initially
+    document.addEventListener('DOMContentLoaded', hideAllFilters);
+
+    document.getElementById('propertyType').addEventListener('change', function() {
+        const propertyType = this.value;
+        document.getElementById('availability').classList.remove('hidden');
+    });   
+    function loadLocalities() {
+        const city = document.getElementById("city").value;
+        const localitiesInput = document.getElementById("localities");
+        if (city) {
+            fetch(`https://example.com/api/localities?city=${encodeURIComponent(city)}`)
+                .then(response => response.json())
+                .then(data => {
+                  // Handle localities update here
+                })
+                .catch(error => console.error('Error fetching localities:', error));
+        }
+    }
+</script>
+<script>
+    document.getElementById('propertyType').addEventListener('change', function() {
+        const propertyType = this.value;
+        document.getElementById('availability').classList.remove('hidden');
+    });    
+    function loadLocalities() {
+        const city = document.getElementById("city").value;
+        const localitiesInput = document.getElementById("localities");   
+        if (city) {
+            fetch(`https://example.com/api/localities?city=${encodeURIComponent(city)}`)
+                .then(response => response.json())
+                .then(data => {
+              // Handle localities update here
+                })
+                .catch(error => console.error('Error fetching localities:', error));
+        }
+    }
+</script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

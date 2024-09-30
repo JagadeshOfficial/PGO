@@ -12,6 +12,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
     <title>Search</title>
     <style>
         html, body {
@@ -335,11 +344,13 @@
             flex-direction: row;
             width: 100%;
             padding: 20px;
-            padding-left: 150px;
+            padding-left: 50px;
+            padding-top: 20px;
         }
         .filters {
             width: 35%;
             padding: 13px; 
+            padding: 20px;
             background-color: #e1ed7c;
             height: 80vh; /* Fixed height for scrolling */
             overflow-y: auto; /* Enable vertical scrolling */
@@ -347,7 +358,7 @@
             border-radius: 20px;
         }
         .property-list{
-            width: 42%;
+            width: 65%;
             padding: 13px; 
             background-color: lightgray;
             height: 80vh; /* Fixed height for scrolling */
@@ -394,8 +405,18 @@
         .search-bar{
             width: 100%;
         }
-
-        
+        .hidden { 
+            display: none;
+         }
+         .amenities-section {
+            width: 96%;
+            max-width: 800px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
@@ -436,7 +457,7 @@
                             <a class="dropdown-item" href="Customer_Login.html">Customer Login</a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                   <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle custom-dropdown-btn" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-menu-button-wide-fill"></i> Menu
                         </a>
@@ -446,150 +467,482 @@
                             <a class="dropdown-item" href="Services.html">Services</a>
                             <a class="dropdown-item" href="contact.html">Contact</a>
                         </div>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
          </nav>
     </header>
-    <?php
-        include 'db_connect.php';
+   <?php
+    include 'db_connect.php';
 
-        // Initialize search variables
-        $hostelName = isset($_GET['hostelName']) ? $_GET['hostelName'] : '';
-        $localities = isset($_GET['localities']) ? $_GET['localities'] : '';
+    // Initialize search variables
+    $hostelName = isset($_GET['hostelName']) ? $_GET['hostelName'] : '';
+    $localities = isset($_GET['localities']) ? $_GET['localities'] : '';
+    $propertyType = isset($_GET['propertyType']) ? $_GET['propertyType'] : ''; // Retrieve property type
 
-        // Modify SQL query to include search criteria
-        $sql = "SELECT * FROM properties WHERE 1=1";
+    // Modify SQL query to include search criteria
+    $sql = "SELECT * FROM properties WHERE 1=1";
 
-        if (!empty($hostelName)) {
-            $sql .= " AND hostelName LIKE '%" . $conn->real_escape_string($hostelName) . "%'";
-        }
-        if (!empty($localities)) {
-            $sql .= " AND localities LIKE '%" . $conn->real_escape_string($localities) . "%'";
-        }
-        $result = $conn->query($sql);
-    ?>
+    if (!empty($hostelName)) {
+        $sql .= " AND hostelName LIKE '%" . $conn->real_escape_string($hostelName) . "%'";
+    }
+    if (!empty($localities)) {
+        $sql .= " AND localities LIKE '%" . $conn->real_escape_string($localities) . "%'";
+    }
+    if (!empty($propertyType)) {
+        $sql .= " AND propertyType = '$propertyType'";
+    }
+
+    $result = $conn->query($sql);
+?>
   
 
     <!-- HTML for the search bar -->
-    <div class="search-bar">
+   <!-- <div class="search-bar">
         <form method="GET" action="">
             <input type="text" name="hostelName" placeholder="Hostel Name" value="<?php echo htmlspecialchars($hostelName); ?>">
             <input type="text" name="localities" placeholder="localities" value="<?php echo htmlspecialchars($localities); ?>">
             <button type="submit">Search</button>
         </form>
-    </div>
+    </div>-->
 
     <div class="container">
-        <div class="filters">
-            <h3>Filters</h3>
-            <div class="filter-group">
-                <label>BHK Type</label>
-                <input type="checkbox" checked> 1 RK
-                <input type="checkbox"> 1 BHK
-                <input type="checkbox"> 2 BHK
-                <input type="checkbox"> 3 BHK
-                <input type="checkbox"> 4 BHK
-                <input type="checkbox"> 4+ BHK
-            </div>
-            <div class="filter-group">
-                <label>Price Range: ₹ 0 to ₹ 10 Cr</label>
-                <input type="range" min="0" max="100000000" value="2000000">
-            </div>
-            <div class="filter-group">
-                <label>Property Status</label>
-                <input type="radio" name="status" value="Under Construction"> Under Construction <br>
-                <input type="radio" name="status" value="Ready" checked> Ready
-            </div>
-            <div class="filter-group">
-                <label>Furnishing</label>
-                <input type="checkbox"> Full
-                <input type="checkbox"> Semi
-                <input type="checkbox"> None
-            </div>
-            <div class="filter-group">
-                <label>Property Group</label>
-                <input type="checkbox"> Apartment <br>
-                <input type="checkbox"> Independent House/Villa <br>
-                <input type="checkbox"> Gated Community Villa <br>
-                <input type="checkbox"> Standalone Building 
-            </div>
-            <div class="filter-group">
-                <label>Parking</label>
-                <input type="checkbox"> 2 Wheeler
-                <input type="checkbox"> 4 Wheeler
-            </div>
-        </div>      
-        <div class="property-list" id="propertyList">
-            <!-- Property items will be dynamically added here -->
-        
-        
-            <?php
-            include 'db_connect.php';
+    <div class="filters">
+    <h3>Filters</h3>
+    <input type="reset" onclick="resetFilters()">
+    <!-- PG/Hostel Filters -->
 
-            // Initialize search variables
-            $hostelName = isset($_GET['hostelName']) ? $_GET['hostelName'] : '';
-            $localities = isset($_GET['localities']) ? $_GET['localities'] : '';
-            // Modify SQL query to include search criteria
-            $sql = "SELECT * FROM properties WHERE 1=1";
+    <div class="filter-group pg-hostel-filters">
+        <div>pghostel filters</div>
+        <label>Sharing Type</label>
+        <input type="checkbox" class="sharing-filter" value="1 Share" onchange="applyFilters()"> 1 Share
+        <input type="checkbox" class="sharing-filter" value="2 Share" onchange="applyFilters()"> 2 Share
+        <input type="checkbox" class="sharing-filter" value="3 Share" onchange="applyFilters()"> 3 Share
+        <input type="checkbox" class="sharing-filter" value="4 Share" onchange="applyFilters()"> 4 Share
+        <input type="checkbox" class="sharing-filter" value="5 Share" onchange="applyFilters()"> 5 Share
+    </div>
+    <div class="filter-group pg-hostel-filters">
+        <label>Price Range</label>
+        <input type="range" id="price-range" min="0" max="100000" value="5000" onchange="applyFilters()">
+        <span id="price-value">5000</span>
+    </div>
+    
+    <div class="filter-group pg-hostel-filters">
+        <label>Facilities</label>
+        <input type="checkbox" class="facility-filter" value="Wi-Fi" onchange="applyFilters()"> Wi-Fi
+        <input type="checkbox" class="facility-filter" value="AC Rooms" onchange="applyFilters()"> AC Rooms
+        <input type="checkbox" class="facility-filter" value="Geyser" onchange="applyFilters()"> Geyser
+        <input type="checkbox" class="facility-filter" value="Cupboards" onchange="applyFilters()"> Cupboards
+    </div>
+    <div class="filter-group pg-hostel-filters">
+        <label>Availability</label>
+        <input type="radio" name="pg-availability" class="availability-filter"  value="Immediate" onchange="applyFilters()"> Immediate
+        <input type="radio" name="pg-availability" class="availability-filter" value="Within a week" onchange="applyFilters()"> Within a week
+        <input type="radio" name="pg-availability" class="availability-filter" value="Within a month" onchange="applyFilters()"> Within a month
+        <input type="radio" name="pg-availability" class="availability-filter" value="After a month" onchange="applyFilters()"> After a month
+    </div>
+    <!-- Flatmates Filters -->
+    <div class="filter-group flatmates-filters">
+        <label>BHK Type</label>
+        <input type="checkbox" class="bhk-filter" value="1 BHK" onchange="applyFilters()"> 1 BHK
+        <input type="checkbox" class="bhk-filter"  value="2 BHK" onchange="applyFilters()"> 2 BHK
+        <input type="checkbox" class="bhk-filter"  value="3 BHK" onchange="applyFilters()"> 3 BHK
+    </div>
+    <div class="filter-group flatmates-filters">
+        <label>Property Status</label>
+        <input type="radio" name="status" class="property-filter" value="Under Construction" onchange="applyFilters()"> Under Construction
+        <input type="radio" name="status" class="property-filter" value="Ready" onchange="applyFilters()" checked > Ready
+    </div>
+    <div class="filter-group flatmates-filters">
+        <label>Furnishing</label>
+        <input type="checkbox" class="furnishing" value="Full" onchange="applyFilters()"> Full
+        <input type="checkbox" class="furnishing" value="Semi" onchange="applyFilters()"> Semi
+        <input type="checkbox" class="furnishing" value="None" onchange="applyFilters()"> None
+    </div>
+    <div class="filter-group flatmates-filters">
+        <label>Parking</label>
+        <input type="checkbox" class="parking-filter" value="2 Wheeler" onchange="applyFilters()"> 2 Wheeler
+        <input type="checkbox" class="parking-filter" value="4 Wheeler" onchange="applyFilters()"> 4 Wheeler
+    </div>
 
-            if (!empty($hostelName)) {
-                $sql .= " AND hostelName LIKE '%" . $conn->real_escape_string($hostelName) . "%'";
+    <!-- Hotel BOOKing Filters -->
+    <div class="filter-group hotelbooking-filters">
+        <label>BHK Type</label>
+        <input type="checkbox" class="bhk-filter" value="1 BHK" onchange="applyFilters()"> 1 BHK
+        <input type="checkbox" class="bhk-filter"  value="2 BHK" onchange="applyFilters()"> 2 BHK
+        <input type="checkbox" class="bhk-filter"  value="3 BHK" onchange="applyFilters()"> 3 BHK
+    </div>
+    <div class="filter-group hotelbooking-filters">
+        <label>Facilities</label>
+        <input type="checkbox" class="facility-filter" value="Wi-Fi" onchange="applyFilters()"> Wi-Fi
+        <input type="checkbox" class="facility-filter" value="AC Rooms" onchange="applyFilters()"> AC Rooms
+        <input type="checkbox" class="facility-filter" value="Geyser" onchange="applyFilters()"> Geyser
+        <input type="checkbox" class="facility-filter" value="Cupboards" onchange="applyFilters()"> Cupboards
+    </div>
+    <div class="filter-group hotelbooking-filters">
+        <label>Parking</label>
+        <input type="checkbox" class="parking-filter" value="2 Wheeler" onchange="applyFilters()"> 2 Wheeler
+        <input type="checkbox" class="parking-filter" value="4 Wheeler" onchange="applyFilters()"> 4 Wheeler
+    </div>
+    </div>
+    <div class="property-list" id="propertyType">
+    <div class="property-item1">
+    <?php
+    // Capture filter input
+    $city = isset($_GET['city']) ? $_GET['city'] : '';
+    $localities = isset($_GET['localities']) ? $_GET['localities'] : '';
+    $propertyType = isset($_GET['propertyType']) ? $_GET['propertyType'] : '';
+    $availability = isset($_GET['availability']) ? $_GET['availability'] : '';
+
+    // Set table name based on the propertyType
+    $tableName = '';
+    if ($propertyType == 'PG/Hostel') {
+        $tableName = 'properties'; // Assuming 'properties' is the table for PG/Hostel
+    } elseif ($propertyType == 'Flatmates') {
+        $tableName = 'flatmates';
+    }elseif ($propertyType == 'hotelbooking') {
+        $tableName = 'hotelbooking';
+    } 
+
+    // Only proceed if a valid table is selected
+    if (!empty($tableName)) {
+        // Construct the SQL query
+        $sql = "SELECT * FROM $tableName WHERE 1=1"; // '1=1' makes it easier to append conditions
+
+        // Apply filters
+        if (!empty($city)) {
+            $sql .= " AND city = '$city'";
+        }
+        if (!empty($localities)) {
+            // Assume localities are entered as comma-separated values
+            $localityArray = explode(',', $localities);
+            $sql .= " AND (";
+            foreach ($localityArray as $index => $locality) {
+                $locality = trim($locality);
+                if ($index > 0) {
+                    $sql .= " OR ";
+                }
+                $sql .= "localities LIKE '%$locality%'";
             }
-            if (!empty($localities)) {
-                $sql .= " AND localities LIKE '%" . $conn->real_escape_string($localities) . "%'";
-            }
-            $result = $conn->query($sql);
-            ?>
-            <?php
-            // Display properties based on the search criteria
-            if ($result->num_rows > 0) {
-                echo "<div class='properties-list'>";
-                while($row = $result->fetch_assoc()) {
-                    echo "<div class='property-item'>";
-                    echo "<h3>" . $row['hostelName'] . "</h3>";
-                    echo "<p><b>localities: </b> " . $row['localities'] . "</p>";
-                    echo "<p><b>city: </b>" .$row['city'] . "</p>";
+            $sql .= ")";
+        }
+        if (!empty($availability)) {
+            $sql .= " AND availability = '$availability'";
+        }
+
+        // Execute the query
+        $result = $conn->query($sql);
+
+        // Display the results
+        if ($result->num_rows > 0) {
+            echo "<div class='properties-list'>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<div class='property-item , amenities-section'>";    
+                // Display fields based on the selected property type
+                if ($propertyType == 'PG/Hostel') {
+                    echo "<p>id: " . $row['id'] . "</p>";
+                    echo "<h3><a href='property_details.php?propertyType=properties&id=" . $row['id'] . "'>" . $row['hostelName'] . "</a></h3>";  
+                    echo "<p><b>Localities: </b> " . $row['localities'] . "</p>";
+                    echo "<hr>";
+                    echo "<p><b>Sharing Type: </b>" . $row['Sharing_Type'] . "</p>";
+                    // Display images and videos in the same carousel
+                    $images = explode(',', $row['images']);
+                    $videos = !empty($row['videos']) ? explode(',', $row['videos']) : [];
+                    $carouselId = 'carousel-' . $row['id']; // Unique carousel ID
+
+                    // Combine images and videos in one array
+                    $mediaItems = array_merge($images, $videos);
+
+                    // Check if there's more than one media item (image or video)
+                    if (count($mediaItems) > 1) {
+                        // More than one media item, display carousel
+                        echo "<div id='$carouselId' class='carousel slide' data-bs-ride='carousel' style='width: 300px; height: 200px;'>
+                                <div class='carousel-inner' style='width: 300px; height: 200px;'>";
+
+                        foreach ($mediaItems as $index => $item) {
+                            $isImage = strpos($item, '.mp4') === false; // Check if the media item is an image or a video
+                            echo "<div class='carousel-item " . ($index === 0 ? 'active' : '') . "'>";
+                            
+                            if ($isImage) {
+                                // Display image
+                                echo "<img src='" . $item . "' class='d-block w-100' alt='Property Image' style='height:200px; width:300px; object-fit:cover;'/>";
+                            } else {
+                                // Display video
+                                echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                        <source src='" . $item . "' type='video/mp4'>
+                                    </video>";
+                            }
+
+                            echo "</div>";
+                        }
+
+                        echo "</div>
+                            <button class='carousel-control-prev' type='button' data-bs-target='#$carouselId' data-bs-slide='prev' style='height: 100%;'>
+                                <span class='carousel-control-prev-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Previous</span>
+                            </button>
+                            <button class='carousel-control-next' type='button' data-bs-target='#$carouselId' data-bs-slide='next' style='height: 100%;'>
+                                <span class='carousel-control-next-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Next</span>
+                            </button>
+                        </div>";
+                    } else {
+                        // Only one image or video, display it directly
+                        if (!empty($images[0])) {
+                            // Display single image
+                            echo "<img src='" . $images[0] . "' alt='Property Image' style='width:300px; height:200px; padding:5px'/>";
+                        } elseif (!empty($videos[0])) {
+                            // Display single video
+                            echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                    <source src='" . $videos[0] . "' type='video/mp4'>
+                                </video>";
+                        }
+                    }
+                    echo "<p><b>city: </b>" . $row['city'] . "</p>";
                     echo "<p><b>Amount: </b>" . $row['amount'] . "</p>";
                     echo "<p><b>Facilities: </b>" . $row['facilities'] . "</p>";
-                    echo "<p><b>Contact: </b>" . $row['contact'] . "</p>";
-                    echo "<p><b>property_Type: </b>" .$row['propertyType'] . "</p>";
-                    echo "<p><b>availability:  </b>" .$row['availability'] . "</p>";
-                    
-            ?>
-                    <button onclick="showMap(40.712776, -74.005974)">View on Map</button>
-                    <!--<div id="map" style="width: 100%; height: 400px;"></div>-->
-            <?php
-            // Display images
-            echo "<br>";
-           
-            $images = explode(',', $row['images']);
-            foreach ($images as $image) {
-                echo "<img src='" . $image . "' alt='Property Image' style='width:100px; height:100px;'/>";
-            }
+                    echo "<p><b>Contact: </b> " . $row['contact'] . "</p>";
+                    echo "<p><b>property_Type: </b>" . $row['propertyType'] . "</p>";
+                    echo "<p><b>availability:  </b>" . $row['availability'] . "</p>";
+                    // Get Details Button and Like Icon Box
+                    echo "<div style='display: flex; align-items: center; gap: 10px;'>";
+                    echo "<button onclick=\"window.location.href='property_details.php?propertyType=properties&id=" . $row['id'] . "'\" style='background-color: #f65b5b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;'>Get Owner Details</button>";
+                    echo "<div class='like-icon' data-bs-toggle='tooltip' title='Click to Shortlist' style='border: 1px solid #ddd; padding: 8px; border-radius: 5px; cursor: pointer; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; background-color: #f8f8f8;'>";
+                    echo "<i class='bi bi-heart' style='font-size: 18px; color: #f65b5b;'></i>";  // Bootstrap Icons heart inside a box
+                    echo "</div>";
+                   
+                    echo "</div>";
+                    echo "</div>";
+                } elseif ($propertyType == 'Flatmates') {
+                    echo "<h3><a href='property_details.php?propertyType=flatmates&id=" . $row['id'] . "'>" . $row['flatmateName'] . "</a></h3>";     
+                    echo "<p><b>Localities: </b> " . $row['localities'] . "</p>";
+                    echo "<hr>";
+                    echo "<p><b>Sharing Type: </b>" . $row['sharingType'] . "</p>";
+                    // Display images and videos in the same carousel
+                    $images = explode(',', $row['images']);
+                    $videos = !empty($row['videos']) ? explode(',', $row['videos']) : [];
+                    $carouselId = 'carousel-' . $row['id']; // Unique carousel ID
 
-            // Display videos (if any)
-            if (!empty($row['videos'])) {
-                $videos = explode(',', $row['videos']);
-                foreach ($videos as $video) {
-                    echo "<video width='320' height='240' controls>
-                            <source src='" . $video . "' type='video/mp4'>
-                        Your browser does not support the video tag.
-                        </video>";
-                }
+                    // Combine images and videos in one array
+                    $mediaItems = array_merge($images, $videos);
+
+                    // Check if there's more than one media item (image or video)
+                    if (count($mediaItems) > 1) {
+                        // More than one media item, display carousel
+                        echo "<div id='$carouselId' class='carousel slide' data-bs-ride='carousel' style='width: 300px; height: 200px;'>
+                                <div class='carousel-inner' style='width: 300px; height: 200px;'>";
+
+                        foreach ($mediaItems as $index => $item) {
+                            $isImage = strpos($item, '.mp4') === false; // Check if the media item is an image or a video
+                            echo "<div class='carousel-item " . ($index === 0 ? 'active' : '') . "'>";
+                            
+                            if ($isImage) {
+                                // Display image
+                                echo "<img src='" . $item . "' class='d-block w-100' alt='Property Image' style='height:200px; width:300px; object-fit:cover;'/>";
+                            } else {
+                                // Display video
+                                echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                        <source src='" . $item . "' type='video/mp4'>
+                                    </video>";
+                            }
+
+                            echo "</div>";
+                        }
+
+                        echo "</div>
+                            <button class='carousel-control-prev' type='button' data-bs-target='#$carouselId' data-bs-slide='prev' style='height: 100%;'>
+                                <span class='carousel-control-prev-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Previous</span>
+                            </button>
+                            <button class='carousel-control-next' type='button' data-bs-target='#$carouselId' data-bs-slide='next' style='height: 100%;'>
+                                <span class='carousel-control-next-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Next</span>
+                            </button>
+                        </div>";
+                    } else {
+                        // Only one image or video, display it directly
+                        if (!empty($images[0])) {
+                            // Display single image
+                            echo "<img src='" . $images[0] . "' alt='Property Image' style='width:300px; height:200px; padding:5px'/>";
+                        } elseif (!empty($videos[0])) {
+                            // Display single video
+                            echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                    <source src='" . $videos[0] . "' type='video/mp4'>
+                                </video>";
+                        }
+                    }
+                    echo "<p><b>city: </b>" . $row['city'] . "</p>";
+                    echo "<p><b>Price: </b>" . $row['price'] . "</p>";
+                    echo "<p><b>Facilities: </b>" . $row['facilities'] . "</p>";
+                    echo "<p><b>Contact: </b> " . $row['contact'] . "</p>";
+                    echo "<p><b>property_Type: </b>" . $row['propertyType'] . "</p>";
+                    echo "<p><b>availability:  </b>" . $row['availability'] . "</p>";
+                    // Get Details Button and Like Icon Box
+                    echo "<div style='display: flex; align-items: center; gap: 10px;'>";
+                    echo "<button onclick=\"window.location.href='property_details.php?propertyType=flatmates&id=" . $row['id'] . "'\" style='background-color: #f65b5b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;'>Get Owner Details</button>";
+                    echo "<div class='like-icon' data-bs-toggle='tooltip' title='Click to Shortlist' style='border: 1px solid #ddd; padding: 8px; border-radius: 5px; cursor: pointer; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; background-color: #f8f8f8;'>";
+                    echo "<i class='bi bi-heart' style='font-size: 18px; color: #f65b5b;'></i>";  // Bootstrap Icons heart inside a box
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                } elseif ($propertyType == 'hotelbooking') {
+                    echo "<h3><a href='property_details.php?propertyType=hotelbooking&id=" . $row['id'] . "'>" . $row['hotelName'] . "</a></h3>";  
+                    echo "<p><b>Localities: </b> " . $row['localities'] . "</p>";
+                    echo "<hr>";
+                    echo "<p><b>Sharing Type: </b>" . $row['sharingType'] . "</p>";
+                    echo "<p><b>Price: </b>" . $row['price'] . "</p>";
+                    // Display images and videos in the same carousel
+                    $images = explode(',', $row['images']);
+                    $videos = !empty($row['videos']) ? explode(',', $row['videos']) : [];
+                    $carouselId = 'carousel-' . $row['id']; // Unique carousel ID
+
+                    // Combine images and videos in one array
+                    $mediaItems = array_merge($images, $videos);
+
+                    // Check if there's more than one media item (image or video)
+                    if (count($mediaItems) > 1) {
+                        // More than one media item, display carousel
+                        echo "<div id='$carouselId' class='carousel slide' data-bs-ride='carousel' style='width: 300px; height: 200px;'>
+                                <div class='carousel-inner' style='width: 300px; height: 200px;'>";
+
+                        foreach ($mediaItems as $index => $item) {
+                            $isImage = strpos($item, '.mp4') === false; // Check if the media item is an image or a video
+                            echo "<div class='carousel-item " . ($index === 0 ? 'active' : '') . "'>";
+                            
+                            if ($isImage) {
+                                // Display image
+                                echo "<img src='" . $item . "' class='d-block w-100' alt='Property Image' style='height:200px; width:300px; object-fit:cover;'/>";
+                            } else {
+                                // Display video
+                                echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                        <source src='" . $item . "' type='video/mp4'>
+                                    </video>";
+                            }
+
+                            echo "</div>";
+                        }
+
+                        echo "</div>
+                            <button class='carousel-control-prev' type='button' data-bs-target='#$carouselId' data-bs-slide='prev' style='height: 100%;'>
+                                <span class='carousel-control-prev-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Previous</span>
+                            </button>
+                            <button class='carousel-control-next' type='button' data-bs-target='#$carouselId' data-bs-slide='next' style='height: 100%;'>
+                                <span class='carousel-control-next-icon' aria-hidden='true' style='height: 50px; width: 50px;'></span>
+                                <span class='visually-hidden'>Next</span>
+                            </button>
+                        </div>";
+                    } else {
+                        // Only one image or video, display it directly
+                        if (!empty($images[0])) {
+                            // Display single image
+                            echo "<img src='" . $images[0] . "' alt='Property Image' style='width:300px; height:200px; padding:5px'/>";
+                        } elseif (!empty($videos[0])) {
+                            // Display single video
+                            echo "<video width='300px' height='200px' controls style='object-fit:cover;'>
+                                    <source src='" . $videos[0] . "' type='video/mp4'>
+                                </video>";
+                        }
+                    }
+                    echo "<p><b>city: </b>" . $row['city'] . "</p>";
+                    echo "<p><b>Price: </b>" . $row['price'] . "</p>";
+                    echo "<p><b>Facilities: </b>" . $row['facilities'] . "</p>";
+                    echo "<p><b>Contact: </b> " . $row['contact'] . "</p>";
+                    echo "<p><b>property_Type: </b>" . $row['propertyType'] . "</p>";
+                    echo "<p><b>availability:  </b>" . $row['availability'] . "</p>";
+                    // Get Details Button and Like Icon Box
+                    echo "<div style='display: flex; align-items: center; gap: 10px;'>";
+                    echo "<button onclick=\"window.location.href='property_details.php?propertyType=hotelbooking&id=" . $row['id'] . "'\" style='background-color: #f65b5b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;'>Get Owner Details</button>";
+                    echo "<div class='like-icon' data-bs-toggle='tooltip' title='Click to Shortlist' style='border: 1px solid #ddd; padding: 8px; border-radius: 5px; cursor: pointer; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; background-color: #f8f8f8;'>";
+                    echo "<i class='bi bi-heart' style='font-size: 18px; color: #f65b5b;'></i>";  // Bootstrap Icons heart inside a box
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }        
             }
-            echo "<br>";
-            echo "<br>";
             echo "</div>";
-                }
-                echo "</div>";
-            } else {
-                echo "No properties found.";
-            }
+        } else {
+            echo "No properties found.";
+        }
+    } else {
+        echo "Invalid property type selected.";
+    }
 
-            $conn->close();
-            ?>
-        </div>
+    $conn->close();
+    ?>
     </div>
+</div>
+
+    </div>   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+    </script>
+        <script>
+        // Function to hide all filters
+        function hideAllFilters() {
+            document.querySelectorAll('.filter-group').forEach(filterGroup => {
+                filterGroup.classList.add('hidden');
+            });
+        }
+
+        // Function to show filters based on property type
+        function showFilters(filters) {
+            filters.forEach(filter => {
+                filter.classList.remove('hidden');
+            });
+        }
+
+        // Get the property type from PHP and show the relevant filters
+        const propertyType = '<?php echo $propertyType; ?>';
+
+        hideAllFilters();  // Hide all filters initially
+
+        if (propertyType === 'PG/Hostel') {
+            showFilters(document.querySelectorAll('.pg-hostel-filters'));
+        } else if (propertyType === 'Flatmates') {
+            showFilters(document.querySelectorAll('.flatmates-filters'));
+        } else if (propertyType === 'hotelbooking') {
+            showFilters(document.querySelectorAll('.hotelbooking-filters'));
+        }
+        </script>
+        <script>
+function applyFilters() {
+    // Get selected filter values
+    const propertyType = document.getElementById('propertyType').value;
+    const priceRange = document.getElementById('price-range').value;
+    const sharingTypes = Array.from(document.querySelectorAll('.sharing-filter:checked')).map(checkbox => checkbox.value);
+    const facilities = Array.from(document.querySelectorAll('.facility-filter:checked')).map(checkbox => checkbox.value);
+    const availability = document.querySelector('input[name="pg-availability"]:checked')?.value;
+
+    // Create an object with the filter values
+    const filters = {
+        propertyType,
+        priceRange,
+        sharingTypes,
+        facilities,
+        availability
+    };
+
+    // Send the filter data to the server using fetch (AJAX)
+    fetch('fetch_properties.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filters), // Send filters as JSON
+    })
+    .then(response => response.text()) // Parse response as text (HTML content)
+    .then(data => {
+        // Update the property list with the filtered data
+        document.querySelector('.property-list').innerHTML = data;
+    })
+    .catch(error => console.error('Error fetching properties:', error));
+}
+</script> 
 </body>
 </html>
