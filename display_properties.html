@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title>Search</title>
+    <style>
+        * Header Styles */
+.header {
+    background-color: #f8f9fa;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.header nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.bold-link {
+    color: black;
+    font-weight: bold;
+}
+/* Property Owner Styles */
+.property-owner {
+    margin-top: 20px;
+}
+
+.property-owner button, .property-owner-btn {
+    padding: 10px 20px;
+    background-color: #5f99e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+
+        
+    /* Filters Styles */
+    .container {
+    display: flex; /* Use flexbox to align children in a row */
+     /* Space between filters and property list */
+}
+
+.filters {
+    flex: 1; /* Take up 1 part of the available space */
+    background-color: #f0f0f0; /* Light background for visibility */
+    padding: 15px; /* Padding for aesthetics */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.property-list {
+    flex: 2; /* Take up 2 parts of the available space */
+    background-color: #ffffff; /* White background for properties */
+    padding: 15px; /* Padding for aesthetics */
+    border-radius: 5px; /* Rounded corners */
+    max-height: 80vh; /* Set a max height */
+    overflow-y: auto; /* Scrollable if content exceeds height */
+}
+
+        
+
+        .filters h3 {
+            margin-top: -10px;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: flex;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .filter-group input[type="checkbox"] {
+            margin-right: 2px;
+        }
+
+        .filter-group input[type="range"] {
+            width: 100%;
+        }
+
+        /* Dropdown Filter Styles */
+        .AllTypes, .AllLocations {
+            margin-left: -180px;
+            
+        }
+
+        #filter-label {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 50px;
+            margin-right: 10px;
+            color: #333;
+        }
+        .search-bar{
+            width: 100%;
+        }
+        .hidden { 
+            display: none;
+         }
+         .amenities-section {
+            width: 96%;
+            max-width: 800px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .black-link {
+    color: black;
+    text-decoration: none;
+}
+.navbar-nav .nav-link {
+    color: #000 !important;
+}
+.navbar {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 0.5rem 10rem;
+}
+
+/* Logo Styles */
+.Logo {
+    display: flex;
+    align-items: center;
+    text-align: center; /* Center align the content */
+}
+
+.Logo img {
+    max-width: 200%; /* Make sure the image does not exceed its container's width */
+    height: max-content; /* Maintain the image's aspect ratio */
+    border: 0; /* Remove any default border */
+    display: block; /* Remove any inline spacing issues */
+    margin: 0px; /* Center align the image horizontally */
+    margin-left: 2px;
+    max-height: 55px;
+    margin-right: 15px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    margin: 0;
+    text-decoration: none;
+    color: #007bff;
+}
+
+
+    </style>
+</head>
+<body>
+<div class="header">
+        <div class="Logo">
+            <a href="index.html"><img src="Images/Havenist_transparent.png" alt="Havenist"></a>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link pay-rent-box bold-link" href="pay_rent.html">
+                            <i class="fas fa-credit-card"></i> Pay Rent
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link property-owner-btn" href="Property_Owners.html">For Property Owners</a>
+                    </li>
+                    <li class="nav-item dropdown" id="signupDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="signupDropdownMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sign up
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="signupDropdownMenu">
+                            <a class="dropdown-item" href="User_Signup.html">User Signup</a>
+                            <a class="dropdown-item" href="Owner_signup.html">Owner Signup</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" id="loginDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="loginDropdownMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Log in
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="loginDropdownMenu">
+                            <a class="dropdown-item" href="User_Login.html">User Login</a>
+                            <a class="dropdown-item" href="Owner_login.html">Owner Login</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+   
+  
+
+    <!-- HTML for the search bar -->
+   <!-- <div class="search-bar">
+        <form method="GET" action="">
+            <input type="text" name="hostelName" placeholder="Hostel Name" value="">
+            <input type="text" name="localities" placeholder="localities" value="">
+            <button type="submit">Search</button>
+        </form>
+    </div>-->
+
+    <div class="container">
+    <div class="filters">
+        <h3>Filters</h3>
+        <input type="button" value="Reset Filters" onclick="resetFilters()">
+        
+        <!-- PG/Hostel Filters -->
+        <div class="filter-group pg-hostel-filters">
+            <h5>PG/Hostel Filters</h5>
+            <label>Sharing Type</label>
+            <input type="checkbox" class="sharing-filter" value="1 Share" onchange="applyFilters()"> 1 Share
+            <input type="checkbox" class="sharing-filter" value="2 Share" onchange="applyFilters()"> 2 Share
+            <input type="checkbox" class="sharing-filter" value="3 Share" onchange="applyFilters()"> 3 Share
+            <input type="checkbox" class="sharing-filter" value="4 Share" onchange="applyFilters()"> 4 Share
+            <input type="checkbox" class="sharing-filter" value="5 Share" onchange="applyFilters()"> 5 Share
+        </div>
+        
+        <div class="filter-group pg-hostel-filters">
+            <label>Price Range</label>
+            <input type="range" id="price-range-pg" min="0" max="100000" value="5000" onchange="applyFilters()">
+            <span id="price-value-pg">5000</span>
+        </div>
+        
+        <div class="filter-group pg-hostel-filters">
+            <label>Facilities</label>
+            <input type="checkbox" class="facility-filter" value="Wi-Fi" onchange="applyFilters()"> Wi-Fi
+            <input type="checkbox" class="facility-filter" value="AC Rooms" onchange="applyFilters()"> AC Rooms
+            <input type="checkbox" class="facility-filter" value="Geyser" onchange="applyFilters()"> Geyser
+            <input type="checkbox" class="facility-filter" value="Cupboards" onchange="applyFilters()"> Cupboards
+        </div>
+        
+        <div class="filter-group pg-hostel-filters">
+            <label>Availability</label>
+            <input type="radio" name="pg-availability" class="availability-filter" value="Immediate" onchange="applyFilters()"> Immediate
+            <input type="radio" name="pg-availability" class="availability-filter" value="Within a week" onchange="applyFilters()"> Within a week
+            <input type="radio" name="pg-availability" class="availability-filter" value="Within a month" onchange="applyFilters()"> Within a month
+            <input type="radio" name="pg-availability" class="availability-filter" value="After a month" onchange="applyFilters()"> After a month
+        </div>
+        
+        <!-- Flatmates Filters -->
+        <div class="filter-group flatmates-filters">
+            <h5>Flatmates Filters</h5>
+            <label>Age Range</label>
+            <input type="number" id="age-min" placeholder="Min Age" onchange="applyFilters()">
+            <input type="number" id="age-max" placeholder="Max Age" onchange="applyFilters()">
+            
+            <label>Gender</label>
+            <input type="checkbox" class="gender-filter" value="Male" onchange="applyFilters()"> Male
+            <input type="checkbox" class="gender-filter" value="Female" onchange="applyFilters()"> Female
+            
+            <label>Occupation</label>
+            <input type="text" class="occupation-filter" placeholder="Occupation" onchange="applyFilters()">
+        </div>
+        
+        <div class="filter-group flatmates-filters">
+            <label>Preferred Location</label>
+            <input type="text" class="location-filter" placeholder="Preferred Location" onchange="applyFilters()">
+        </div>
+        
+        <div class="filter-group flatmates-filters">
+            <label>Budget</label>
+            <input type="range" id="budget-range" min="0" max="100000" value="5000" onchange="applyFilters()">
+            <span id="budget-value">5000</span>
+        </div>
+        
+        <!-- Hotel Booking Filters -->
+        <div class="filter-group hotelbooking-filters">
+            <h5>Hotel Booking Filters</h5>
+            <label>Room Type</label>
+            <input type="checkbox" class="room-type-filter" value="Single" onchange="applyFilters()"> Single
+            <input type="checkbox" class="room-type-filter" value="Double" onchange="applyFilters()"> Double
+            <input type="checkbox" class="room-type-filter" value="Suite" onchange="applyFilters()"> Suite
+        </div>
+        
+        <div class="filter-group hotelbooking-filters">
+            <label>Price Per Night</label>
+            <input type="range" id="price-range-hotel" min="0" max="100000" value="5000" onchange="applyFilters()">
+            <span id="price-value-hotel">5000</span>
+        </div>
+        
+        <div class="filter-group hotelbooking-filters">
+            <label>Amenities</label>
+            <input type="checkbox" class="amenities-filter" value="Free Breakfast" onchange="applyFilters()"> Free Breakfast
+            <input type="checkbox" class="amenities-filter" value="Wi-Fi" onchange="applyFilters()"> Wi-Fi
+            <input type="checkbox" class="amenities-filter" value="Swimming Pool" onchange="applyFilters()"> Swimming Pool
+        </div>
+        
+        <div class="filter-group hotelbooking-filters">
+            <label>Available Rooms</label>
+            <input type="number" id="available-rooms" placeholder="Number of Rooms" onchange="applyFilters()">
+        </div>
+    </div>
+    <div class="property-list" id="propertyType">
+    <div class="property-item1">
+    
+    </div>
+</div>
+</div>
+<!-- Bootstrap Modal for Enlarged Media -->
+<div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body" style="text-align:center;">
+        <!-- Media content will be loaded dynamically here -->
+        <img id="modalImage" style="width: 100%; height: auto; display:none;" alt="Large Media">
+        <video id="modalVideo" controls style="width: 100%; height: auto; display:none;">
+          <source id="modalVideoSource" type="video/mp4">
+        </video>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// JavaScript to handle opening media in the modal
+function openModal(mediaUrl, isImage) {
+    if (isImage) {
+        document.getElementById('modalImage').src = mediaUrl;
+        document.getElementById('modalImage').style.display = 'block';
+        document.getElementById('modalVideo').style.display = 'none';
+    } else {
+        document.getElementById('modalVideoSource').src = mediaUrl;
+        document.getElementById('modalVideo').load();
+        document.getElementById('modalVideo').style.display = 'block';
+        document.getElementById('modalImage').style.display = 'none';
+    }
+}
+</script>
+<script>
+function resetFilters() {
+    // Reset all checkbox inputs
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+        checkbox.checked = false; // Uncheck all checkboxes
+    });
+
+    // Reset all radio inputs
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach((radio) => {
+        radio.checked = false; // Uncheck all radio buttons
+    });
+
+    // Reset price range slider
+    const priceRange = document.getElementById('price-range');
+    priceRange.value = 5000; // Reset to default value (or any other default you want)
+    document.getElementById('price-value').innerText = priceRange.value; // Update displayed price value
+
+    // Optionally, you can also call applyFilters() if you want to refresh the displayed properties
+    applyFilters(); // Call to refresh the properties based on reset filters
+}
+
+// Function to display the price value of the range input
+document.getElementById('price-range').addEventListener('input', function () {
+    document.getElementById('price-value').innerText = this.value; // Update displayed price value
+});
+function resetFilters() {
+    // Logic to reset all filters to their default state
+    document.querySelectorAll('.filters input').forEach(input => {
+        input.checked = false;
+        if (input.type === 'range') {
+            input.value = input.min; // Reset to minimum
+        }
+    });
+    document.getElementById('price-value-pg').textContent = 5000; // Reset price display
+    document.getElementById('budget-value').textContent = 5000; // Reset budget display
+}
+</script>
+
+   
+
+    </div>   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+    </script>
+        <script>
+        // Function to hide all filters
+        function hideAllFilters() {
+            document.querySelectorAll('.filter-group').forEach(filterGroup => {
+                filterGroup.classList.add('hidden');
+            });
+        }
+
+        // Function to show filters based on property type
+        function showFilters(filters) {
+            filters.forEach(filter => {
+                filter.classList.remove('hidden');
+            });
+        }
+
+        // Get the property type from PHP and show the relevant filters
+        const propertyType = '';
+
+        hideAllFilters();  // Hide all filters initially
+
+        if (propertyType === 'PG/Hostel') {
+            showFilters(document.querySelectorAll('.pg-hostel-filters'));
+        } else if (propertyType === 'Flatmates') {
+            showFilters(document.querySelectorAll('.flatmates-filters'));
+        } else if (propertyType === 'hotelbooking') {
+            showFilters(document.querySelectorAll('.hotelbooking-filters'));
+        }
+        </script>
+        <script>
+function applyFilters() {
+    // Get selected filter values
+    const propertyType = document.getElementById('propertyType').value;
+    const priceRange = document.getElementById('price-range').value;
+    const sharingTypes = Array.from(document.querySelectorAll('.sharing-filter:checked')).map(checkbox => checkbox.value);
+    const facilities = Array.from(document.querySelectorAll('.facility-filter:checked')).map(checkbox => checkbox.value);
+    const availability = document.querySelector('input[name="pg-availability"]:checked')?.value;
+
+    // Create an object with the filter values
+    const filters = {
+        propertyType,
+        priceRange,
+        sharingTypes,
+        facilities,
+        availability
+    };
+
+    // Send the filter data to the server using fetch (AJAX)
+    fetch('fetch_properties.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filters), // Send filters as JSON
+    })
+    .then(response => response.text()) // Parse response as text (HTML content)
+    .then(data => {
+        // Update the property list with the filtered data
+        document.querySelector('.property-list').innerHTML = data;
+    })
+    .catch(error => console.error('Error fetching properties:', error));
+}
+</script> 
+</body>
+</html>

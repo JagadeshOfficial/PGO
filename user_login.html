@@ -80,7 +80,7 @@
                         </div>
                     </li>
                     <li class="nav-item" id="profileSection" style="display:none;">
-                        <a class="nav-link" href="user_profile.php">Profile</a>
+                        <a class="nav-link" href="user_profile.html">Profile</a>
                     </li>
                 </ul>
             </div>
@@ -132,7 +132,8 @@
                 var data = JSON.parse(response);
                 if (data.status === 'success') {
                     sessionStorage.setItem('userLoggedIn', 'true'); // Store the login status in sessionStorage
-                    window.location.href = 'user_index.html';  // Redirect after successful login
+                    sessionStorage.setItem('userEmail', email); // Store user email
+                    window.location.href = 'index.html';  // Redirect after successful login
                 } else {
                     alert(data.message); // Show an error message if login fails
                 }

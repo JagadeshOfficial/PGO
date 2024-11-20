@@ -1,10 +1,15 @@
 <?php
-// Database connection
-$servername = "localhost";
-$username = "root"; // Adjust if needed
-$password = "1234"; // Adjust if needed
-$dbname = "pghostels"; // Your database name
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+// Database configuration
+$servername = "localhost"; 
+$username = "root"; 
+$password = "12345"; 
+$dbname = "havenist"; 
+
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
@@ -12,149 +17,91 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Determine which form was submitted
-$form_type = $_POST['form_type'];
+// Check if form was submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve and sanitize common input data
+    $property_type = $conn->real_escape_string(trim($_POST['form_type']));
+    $city = $conn->real_escape_string(trim($_POST['city']));
+    $owner_name = $conn->real_escape_string(trim($_POST['owner_name']));
+    $owner_contact = $conn->real_escape_string(trim($_POST['owner_contact']));
+    $description = $conn->real_escape_string(trim($_POST['description']));
+    $bhk_type = $conn->real_escape_string(trim($_POST['bhk_type'])); // BHK Type added
 
-if ($form_type === 'hotelbooking') {
-    // Collect hotel booking form data
-    $hotelName = $_POST['hotelName'];
-    $location = $_POST['localities'];
-    $sharingType = $_POST['sharingType'];
-    // Handle images upload
-    $image_paths = [];
-    $target_dir_images = "uploads/";
-    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-        $file_name = basename($_FILES['images']['name'][$key]);
-        $target_file = $target_dir_images . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $image_paths[] = $target_file;
-        }
+    // Ensure the uploads directory exists
+    if (!is_dir('uploads')) {
+        mkdir('uploads', 0755, true);
     }
-    $images = implode(',', $image_paths);
 
-    // Handle videos upload
-    $video_paths = [];
-    $target_dir_videos = "uploads/";
-    foreach ($_FILES['videos']['tmp_name'] as $key => $tmp_name) {
-        if ($_FILES['videos']['error'][$key] === UPLOAD_ERR_NO_FILE) {
-            continue; // No video uploaded for this input
+    // Handle based on form type
+    if ($property_type == 'hotelbooking') {
+        // Specific fields for Hotel Booking
+        $hotel_name = $conn->real_escape_string(trim($_POST['hotelName']));
+        $price = $conn->real_escape_string(trim($_POST['price']));
+        $facilities = $conn->real_escape_string(trim($_POST['facilities']));
+        $location = $conn->real_escape_string(trim($_POST['location']));
+        $availability = $conn->real_escape_string(trim($_POST['availability']));
+        $image_urls = implode(',', $_FILES['images']['name']); // Handle images
+        $contact = $conn->real_escape_string(trim($_POST['contact']));
+
+        // Move uploaded images
+        foreach ($_FILES['images']['error'] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $tmp_name = $_FILES['images']['tmp_name'][$key];
+                $target_file = 'uploads/' . basename($_FILES['images']['name'][$key]);
+                move_uploaded_file($tmp_name, $target_file);
+            }
         }
-        $file_name = basename($_FILES['videos']['name'][$key]);
-        $target_file = $target_dir_videos . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $video_paths[] = $target_file;
+
+        // SQL query to insert data into hotel_booking table
+        $sql = "INSERT INTO hotel_booking (hotel_name, city, bhk_type, price, facilities, localities, availability, owner_name, owner_contact, description, image_url)
+                VALUES ('$hotel_name', '$city', '$bhk_type', '$price', '$facilities', '$location', '$availability', '$owner_name', '$owner_contact', '$description', '$image_urls')";
+
+    } elseif ($property_type == 'flatmates') {
+        // Specific fields for Flatmates
+        $flatmate_name = $conn->real_escape_string(trim($_POST['flatmateName']));
+        $price = $conn->real_escape_string(trim($_POST['price']));
+        $facilities = $conn->real_escape_string(trim($_POST['facilities']));
+        $location = $conn->real_escape_string(trim($_POST['location']));
+        $availability = $conn->real_escape_string(trim($_POST['availability']));
+        $image_urls = implode(',', $_FILES['images']['name']); // Handle images
+
+        // Move uploaded images
+        foreach ($_FILES['images']['error'] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $tmp_name = $_FILES['images']['tmp_name'][$key];
+                $target_file = 'uploads/' . basename($_FILES['images']['name'][$key]);
+                move_uploaded_file($tmp_name, $target_file);
+            }
         }
+
+        // SQL query to insert data into flatmates table
+        $sql = "INSERT INTO flatmates (flatmate_name, city, price, sharing_type, facilities, localities, availability, owner_name, owner_contact, description, image_url)
+                VALUES ('$flatmate_name', '$city', '$price', '{$_POST['sharingType']}', '$facilities', '$location', '$availability', '$owner_name', '$owner_contact', '$description', '$image_urls')";
+    
+    } elseif ($property_type == 'pgHostel') {
+        // Specific fields for PG/Hostel
+        $property_name = $conn->real_escape_string(trim($_POST['property_name']));
+        $price = $conn->real_escape_string(trim($_POST['price']));
+        $sharing_type = $conn->real_escape_string(trim($_POST['sharing_type']));
+        $facilities = $conn->real_escape_string(trim($_POST['facilities']));
+        $address = $conn->real_escape_string(trim($_POST['address']));
+        $area_size = $conn->real_escape_string(trim($_POST['area_size']));
+        $availability = $conn->real_escape_string(trim($_POST['availability']));
+        $image_url = $conn->real_escape_string(trim($_POST['image_url']));
+
+        // SQL query to insert data into pg_hostels table
+        $sql = "INSERT INTO pg_hostels (property_name, property_type, city, price, sharing_type, facilities, address, area_size, availability, image_url, owner_name, owner_contact, description)
+                VALUES ('$property_name', 'Hostel', '$city', '$price', '$sharing_type', '$facilities', '$address', '$area_size', '$availability', '$image_url', '$owner_name', '$owner_contact', '$description')";
     }
-    $videos = implode(',', $video_paths);
 
-    $price = $_POST['Price'];
-    $facilities = $_POST['facilities'];
-    $contact = $_POST['contact'];
-    $city = $_POST['city'];
-    $propertyType = $_POST['propertyType'];
-    $availability = $_POST['availability'];
-    $description = $_POST['description'];
-
-    // SQL to insert hotel booking data
-    $sql = "INSERT INTO hotelbooking (hotelName, localities, sharingType, images, videos, price, facilities, contact, city, propertyType, availability, description) 
-            VALUES ('$hotelName', '$location', '$sharingType', '$images', '$videos', '$price', '$facilities', '$contact', '$city', '$propertyType', '$availability', '$description')";
-
-} elseif ($form_type === 'pgHostel') {
-    // Collect PG/Hostel form data
-    $hostelName = $_POST['hostelName'];
-    $localities = $_POST['localities'];
-    $sharingType = $_POST['Sharing_Type'];
-    // Handle images upload
-    $image_paths = [];
-    $target_dir_images = "uploads/";
-    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-        $file_name = basename($_FILES['images']['name'][$key]);
-        $target_file = $target_dir_images . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $image_paths[] = $target_file;
-        }
+    // Execute the query and check for success
+    if ($conn->query($sql) === TRUE) {
+        echo "New property added successfully.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    $images = implode(',', $image_paths);
-
-    // Handle videos upload
-    $video_paths = [];
-    $target_dir_videos = "uploads/";
-    foreach ($_FILES['videos']['tmp_name'] as $key => $tmp_name) {
-        if ($_FILES['videos']['error'][$key] === UPLOAD_ERR_NO_FILE) {
-            continue; // No video uploaded for this input
-        }
-        $file_name = basename($_FILES['videos']['name'][$key]);
-        $target_file = $target_dir_videos . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $video_paths[] = $target_file;
-        }
-    }
-    $videos = implode(',', $video_paths);
-
-    $amount = $_POST['amount'];
-    $facilities = $_POST['facilities'];
-    $contact = $_POST['contact'];
-    $city = $_POST['city'];
-    $propertyType = $_POST['propertyType'];
-    $availability = $_POST['availability'];
-    $description = $_POST['description'];
-
-    // SQL to insert PG/Hostel data
-    $sql = "INSERT INTO properties (hostelName, localities, Sharing_Type, images, videos,  amount, facilities, contact, city, propertyType, availability, description) 
-            VALUES ('$hostelName', '$localities', '$sharingType', '$images', '$videos',  '$amount', '$facilities', '$contact', '$city', '$propertyType', '$availability', '$description')";
-
-} elseif ($form_type === 'flatmates') {
-    // Collect flatmates form data
-    $flatmateName = $_POST['flatmateName'];
-    $localities = $_POST['localities'];
-    $sharingType = $_POST['sharingType'];
-    // Handle images upload
-    $image_paths = [];
-    $target_dir_images = "uploads/";
-    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-        $file_name = basename($_FILES['images']['name'][$key]);
-        $target_file = $target_dir_images . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $image_paths[] = $target_file;
-        }
-    }
-    $images = implode(',', $image_paths);
-
-    // Handle videos upload
-    $video_paths = [];
-    $target_dir_videos = "uploads/";
-    foreach ($_FILES['videos']['tmp_name'] as $key => $tmp_name) {
-        if ($_FILES['videos']['error'][$key] === UPLOAD_ERR_NO_FILE) {
-            continue; // No video uploaded for this input
-        }
-        $file_name = basename($_FILES['videos']['name'][$key]);
-        $target_file = $target_dir_videos . $file_name;
-        if (move_uploaded_file($tmp_name, $target_file)) {
-            $video_paths[] = $target_file;
-        }
-    }
-    $videos = implode(',', $video_paths);
-
-    $price = $_POST['hotelBookingPrice'];
-    $facilities = $_POST['facilities'];
-    $contact = $_POST['contact'];
-    $city = $_POST['city'];
-    $propertyType = $_POST['propertyType'];
-    $availability = $_POST['availability'];
-    $description = $_POST['description'];
-
-    // SQL to insert flatmates data
-    $sql = "INSERT INTO flatmates (flatmateName, localities, sharingType, images, videos, price, facilities, contact, city, propertyType, availability, description) 
-            VALUES ('$flatmateName', '$localities', '$sharingType', '$images', '$videos', '$price', '$facilities', '$contact', '$city', '$propertyType', '$availability','$description')";
 }
 
-// Execute the query and check if successful
-if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-// Close connection
+// Close the connection
 $conn->close();
-
+?>

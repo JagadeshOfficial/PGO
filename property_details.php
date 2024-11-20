@@ -20,8 +20,9 @@
         
         .amenities-section {
             width: 100%;
-            max-width: 800px;
+            max-width: 1400px;
             margin: 20px;
+            margin-left: 200px;
             padding: 20px;
             border: 1px solid #eaeaea;
             border-radius: 8px;
@@ -173,7 +174,7 @@ if (isset($_GET['propertyType']) && isset($_GET['id'])) {
 
     // Based on the type, fetch details from the corresponding table
     if ($propertyType == "properties") {
-        $stmt = $connection->prepare("SELECT * FROM pg_hostels WHERE id = ?");
+        $stmt = $connection->prepare("SELECT * FROM properties WHERE id = ?");
         $stmt->bind_param("i", $id);
     } elseif ($propertyType == "flatmates") {
         $stmt = $connection->prepare("SELECT * FROM flatmates WHERE id = ?");
@@ -259,21 +260,21 @@ if (isset($_GET['propertyType']) && isset($_GET['id'])) {
                     echo "<p><b>Amount: </b>" . htmlspecialchars($data['amount']) . "</p>";
                     echo "<p><b>Facilities: </b>" . htmlspecialchars($data['facilities']) . "</p>";
                     echo "<p><b>Contact: </b> " . htmlspecialchars($data['contact']) . "</p>";
-                    echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
+                    //echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
                     echo "<p><b>availability:  </b>" . htmlspecialchars($data['availability']) . "</p>";
                     echo "</div>";
                     echo "<div class='amenities-section'>";
                     echo "<div class='amenities-header'>Description:</div>"; 
-                    echo "<div class='amenities-description'>" . htmlspecialchars($data['description']) . "</div>";
+                    echo "<div class='amenities-description'>" . htmlspecialchars($data['description'] ?? '') . "</div>";
                     echo "</div>";
                     echo "</div>";
                 }elseif ($propertyType == "flatmates") {
                     echo "<div class='amenities-section'>";
-                    echo "<h1>" . htmlspecialchars($data['flatmateName']) . "</h1>";
-                    echo "<p class='localities'><b>Localities: </b> " . htmlspecialchars($data['localities']) . "</p>";
-                    echo "<p><b>Sharing Type: </b>" . htmlspecialchars($data['sharingType']) . "</p>";
+                    echo "<h1>" . htmlspecialchars($data['name']) . "</h1>";
+                    echo "<p class='localities'><b>Localities: </b> " . htmlspecialchars($data['Localities']) . "</p>";
+                    echo "<p><b>Sharing Type: </b>" . htmlspecialchars($data['sharing_type']) . "</p>";
                       // Display images and videos in the same carousel
-                    $images = explode(',', $data['images']);
+                    $images = explode(',', $data['image_urls']);
                     $videos = !empty($data['videos']) ? explode(',', $data['videos']) : [];
                     $carouselId = 'carousel-' . $data['id']; // Unique carousel ID
 
@@ -326,11 +327,11 @@ if (isset($_GET['propertyType']) && isset($_GET['id'])) {
                         }
                     }
                     echo "<p><b>city: </b>" . htmlspecialchars($data['city']) . "</p>";
-                    echo "<p><b>Amount: </b>" . htmlspecialchars($data['price']) . "</p>";
-                    echo "<p><b>Facilities: </b>" . htmlspecialchars($data['facilities']) . "</p>";
-                    echo "<p><b>Contact: </b> " . htmlspecialchars($data['contact']) . "</p>";
-                    echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
-                    echo "<p><b>availability:  </b>" . htmlspecialchars($data['availability']) . "</p>";
+                    echo "<p><b>Amount: </b>" . htmlspecialchars($data['budget']) . "</p>";
+                  //  echo "<p><b>Facilities: </b>" . htmlspecialchars($data['facilities']) . "</p>";
+                    echo "<p><b>Contact: </b> " . htmlspecialchars($data['contact_info']) . "</p>";
+                   // echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
+                    echo "<p><b>Available from:  </b>" . htmlspecialchars($data['available_from']) . "</p>";
                     echo "</div>";
                     echo "<div class='amenities-section'>";
                     echo "<div class='amenities-header'>Description:</div>"; 
@@ -339,11 +340,11 @@ if (isset($_GET['propertyType']) && isset($_GET['id'])) {
                     echo "</div>";
                 } elseif ($propertyType == "hotelbooking") {
                     echo "<div class='amenities-section'>";
-                    echo "<h1>" . htmlspecialchars($data['hotelName']) . "</h1>";
-                    echo "<p class='localities'><b>Localities: </b> " . htmlspecialchars($data['localities']) . "</p>";
-                    echo "<p><b>Sharing Type: </b>" . htmlspecialchars($data['sharingType']) . "</p>";
+                    echo "<h1>" . htmlspecialchars($data['hotel_name']) . "</h1>";
+                    echo "<p class='localities'><b>Localities: </b> " . htmlspecialchars($data['Localities']) . "</p>";
+                    echo "<p><b>Sharing Type: </b>" . htmlspecialchars($data['room_type']) . "</p>";
                      // Display images and videos in the same carousel
-                    $images = explode(',', $data['images']);
+                    $images = explode(',', $data['image_urls']);
                     $videos = !empty($data['videos']) ? explode(',', $data['videos']) : [];
                     $carouselId = 'carousel-' . $data['id']; // Unique carousel ID
 
@@ -396,11 +397,11 @@ if (isset($_GET['propertyType']) && isset($_GET['id'])) {
                         }
                     }
                     echo "<p><b>city: </b>" . htmlspecialchars($data['city']) . "</p>";
-                    echo "<p><b>Amount: </b>" . htmlspecialchars($data['price']) . "</p>";
-                    echo "<p><b>Facilities: </b>" . htmlspecialchars($data['facilities']) . "</p>";
-                    echo "<p><b>Contact: </b> " . htmlspecialchars($data['contact']) . "</p>";
-                    echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
-                    echo "<p><b>availability:  </b>" . htmlspecialchars($data['availability']) . "</p>";
+                    echo "<p><b>Amount: </b>" . htmlspecialchars($data['price_per_night']) . "</p>";
+                    echo "<p><b>Facilities: </b>" . htmlspecialchars($data['amenities']) . "</p>";
+                    echo "<p><b>Contact: </b> " . htmlspecialchars($data['owner_contact']) . "</p>";
+                   // echo "<p><b>property_Type: </b>" . htmlspecialchars($data['propertyType']) . "</p>";
+                    echo "<p><b>availability:  </b>" . htmlspecialchars($data['available_rooms']) . "</p>";
                     echo "</div>";
                     echo "<div class='amenities-section'>";
                     echo "<div class='amenities-header'>Description:</div>"; 

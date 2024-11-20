@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Havenist - Owner Login</title>
+    <title>Havenist - User Login</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -90,21 +90,21 @@
     <!-- Login Form -->
     <div class="centered-container">
         <div class="login-form">
-            <h2>Owner Login</h2>
-            <form id="loginForm" action="owner_login_process.php" method="POST">
+            <h2>owner Login</h2>
+            <form id="loginForm">
                 <div class="form-group">
                     <label for="ownerEmail">Email</label>
                     <input type="email" class="form-control" id="ownerEmail" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
-                    <label for="ownerPassword">Password</label>
-                    <input type="password" class="form-control" id="ownerPassword" placeholder="Enter your password" required>
+                    <label for="userPassword">Password</label>
+                    <input type="password" class="form-control" id="userPassword" placeholder="Enter your password" required>
                 </div>
                 <div class="form-group">
-                    <a href="user_forgot_password.html" class="btn btn-link">Forgot Password?</a>
+                    <a href="owner_forgot_password.html" class="btn btn-link">Forgot Password?</a>
                 </div>
                 <button type="submit" class="submit-btn">Login</button>
-                <a href="Owner_signup.html">Are you a New User?</a>
+                <a href="owner_signup.html">Are you a New User?</a>
             </form>
         </div>
     </div>
@@ -116,33 +116,35 @@
     <!-- Custom JS for AJAX request -->
     <script>
         $(document).ready(function () {
-            $('#loginForm').on('submit', function (event) {
-                event.preventDefault(); // Prevent form from submitting normally
-                
-                // Retrieve form data
-                var email = $('#ownerEmail').val();
-                var password = $('#ownerPassword').val();
-    
-                // AJAX request to handle login
-                $.ajax({
-                    url: 'owner_login_process.php',
-                    type: 'POST',
-                    data: { email: email, password: password },
-                    success: function (response) {
-                        var data = JSON.parse(response);
-                        if (data.status === 'success') {
-                            sessionStorage.setItem('ownerLoggedIn', 'true');
-                            window.location.href = 'owner_index.html';  // Redirect after login
-                        } else {
-                            alert(data.message); // Show an error message if login fails
-                        }
-                    },
-                    error: function () {
-                        alert('An error occurred during login. Please try again.');
-                    }
-                });
-            });
+    $('#loginForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent form from submitting normally
+        
+        // Retrieve form data
+        var email = $('#ownerEmail').val();
+        var password = $('#userPassword').val();
+
+        // AJAX request to handle login
+        $.ajax({
+            url: 'owner_login_process.php',
+            type: 'POST',
+            data: { email: email, password: password },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status === 'success') {
+                    sessionStorage.setItem('ownerLoggedIn', 'true'); // Store the login status in sessionStorage
+                    sessionStorage.setItem('ownerEmail', email); // Store user email
+                    window.location.href = 'index.html';  // Redirect after successful login
+                } else {
+                    alert(data.message); // Show an error message if login fails
+                }
+            },
+            error: function () {
+                alert('An error occurred during login. Please try again.');
+            }
         });
+    });
+});
+
     </script>
     
 </body>
